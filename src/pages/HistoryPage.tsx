@@ -8,6 +8,7 @@ import {
 } from '../services/feedbackService';
 import FeedbackItem from '../components/FeedbackItem';
 import Navbar from '../components/Navbar';
+import { Link } from 'react-router-dom';
 
 
 const HistoryPage: React.FC = () => {
@@ -110,12 +111,11 @@ const HistoryPage: React.FC = () => {
         ) : feedbacks.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-lg shadow-sm p-8">
             <p className="text-gray-600 mb-4">You haven't submitted any feedback yet.</p>
-            <a
-              href="/feedback"
+            <Link to="/feedback"
               className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 inline-block"
             >
               Submit Feedback
-            </a>
+            </Link>
           </div>
         ) : (
           <div className="space-y-6">
