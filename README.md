@@ -48,10 +48,13 @@ If no matches are found, the app notifies the user accordingly.
 **🔒 Protected Routes**
 Only authenticated users can access feedback functionalities and personal history.
 
+**Note:**
+This website is hosted on Vercel. After successfully logging in, please do not refresh the page. **Due to protected routes** and how Vercel handles routing, refreshing may result in a 404: NOT_FOUND error. This happens because Vercel attempts to reload a route that isn’t directly accessible without authentication.
+
 **🌐 Cloud Database**
 All event and feedback data is stored in MongoDB Atlas, ensuring scalability, reliability, and security.
 
-**📱 Responsive Design**
+**📱 Responsive Design** 
 The app is mobile-friendly and works smoothly on all screen sizes.
 
 # Technical Specifications:
