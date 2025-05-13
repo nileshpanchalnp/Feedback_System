@@ -1,1 +1,1 @@
-export const Server = "http://localhost:8000/";
+export const Server = "https://feedback-system-backend-lo6w.onrender.com/";
