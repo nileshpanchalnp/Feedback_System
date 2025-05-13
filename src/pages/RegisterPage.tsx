@@ -29,7 +29,7 @@ const RegisterPage: React.FC = () => {
         password,
       });
       toast.success('Registration successful!');
-      navigate('/'); 
+      navigate('/login'); 
     } catch (error: any) {
       let message = 'Registration failed. Please try again.';
       if (axios.isAxiosError(error) && error.response) {
