@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { UserPlus, Eye, EyeOff } from 'lucide-react';
+import { UserPlus, Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
 import { Server } from '../SERVER/server';
 
 const RegisterPage: React.FC = () => {
@@ -20,30 +20,45 @@ const RegisterPage: React.FC = () => {
   const validatePassword = (password: string) => {
     return /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/.test(password);
   };
-
+  const [errors, setErrors] = useState({
+    name: '',
+    email: '',
+    password: '',
+  });
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !email || !password) {
-      toast.error('Please fill out all fields');
+    const newErrors = {
+      name: '',
+      email: '',
+      password: '',
+    };
+
+    if (!name) {
+      newErrors.name = 'Name is required';
+    } else if (name.length < 3) {
+      newErrors.name = 'Name must be at least 3 characters long';
+    }
+
+    if (!email) {
+      newErrors.email = 'Email is required';
+    } else if (!validateEmail(email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+
+    if (!password) {
+      newErrors.password = 'Password is required';
+    } else if (!validatePassword(password)) {
+      newErrors.password = 'Password must be at least 6 characters and include both letters and numbers';
+    }
+
+    setErrors(newErrors);
+
+    // If any error exists, return early
+    if (Object.values(newErrors).some((msg) => msg)) {
       return;
     }
 
-
-    if (name.length < 3) {
-      toast.error('Name must be at least 3 characters long');
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      toast.error('Please enter a valid email address');
-      return;
-    }
-
-    if (!validatePassword(password)) {
-      toast.error('Password must be at least 6 characters and include both letters and numbers');
-      return;
-    }
     setIsSubmitting(true);
 
     try {
@@ -66,97 +81,118 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-900 to-secondary-800 px-4 py-12">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-xl">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create Your Account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Register to submit and manage your feedback
-          </p>
-        </div>
-
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="name" className="sr-only">Name</label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                minLength={3}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
-                placeholder="Full Name"
-              />
-            </div>
-            <div>
-              <label htmlFor="email" className="sr-only">Email address</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
-              />
-            </div>
-            <div className="relative">
-              <label htmlFor="password" className="sr-only">Password</label>
-              <input
-                id="password"
-                name="password"
-                type={showPassword ? 'text' : 'password'}
-                autoComplete="new-password"
-                required
-                minLength={6}
-                pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"
-                title="At least 6 characters, including letters and numbers"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm pr-10"
-                placeholder="Password"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 flex items-center pr-3"
-              >
-                {showPassword ? (
-                  <EyeOff className="h-5 w-5 text-gray-400" />
-                ) : (
-                  <Eye className="h-5 w-5 text-gray-400" />
-                )}
-              </button>
-            </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-900 via-primary-800 to-secondary-900 px-4 py-12">
+      <div className="max-w-md w-full space-y-8">
+        <div className="bg-white/10 backdrop-blur-lg rounded-t-2xl p-8 shadow-xl border border-white/20">
+          <div className="text-center">
+            <h2 className="text-4xl font-bold text-white mb-2">Create Account</h2>
+            <p className="text-gray-300">Join the Event Feedback System</p>
           </div>
+          <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+            <div className="space-y-4">
+              <div className="relative">
+                <label htmlFor="name" className="text-sm font-medium text-gray-300 block mb-2">
+                  Full Name
+                </label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    required
+                    minLength={3}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="block w-full pl-10 pr-4 py-3 bg-white/5 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                    placeholder="Full Name"
+                  />
+                </div>
+              </div>
+              <div className="relative">
+                <label htmlFor="email" className="text-sm font-medium text-gray-300 block mb-2">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className={`block w-full pl-10 pr-12 py-3 bg-white/5 border ${errors.email ? 'border-red-500' : 'border-gray-600'}
+        } rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 ${errors.email ? 'focus:ring-red-500' : 'focus:ring-primary-500'}
+        focus:border-transparent transition-all`}
+                    placeholder="Email address"
+                  />
+                </div>
+                {errors.email && <p className="text-red-400 text-sm mt-1 ml-1">{errors.email}</p>}
+              </div>
 
-          <div>
+
+              <div className="relative">
+                <label htmlFor="password" className="text-sm font-medium text-gray-300 block mb-2">
+                  Password
+                </label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                  <input
+                    id="password"
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="new-password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className={`block w-full pl-10 pr-12 py-3 bg-white/5 border ${errors.password ? 'border-red-500' : 'border-gray-600'
+                      } rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 ${errors.password ? 'focus:ring-red-500' : 'focus:ring-primary-500'
+                      } focus:border-transparent transition-all`}
+                    placeholder="Password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300 focus:outline-none"
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
+                {errors.password && <p className="text-red-400 text-sm mt-1 ml-1">{errors.password}</p>}
+              </div>
+
+            </div>
+
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-primary-700'
-                }`}
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-xl text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
             >
               <span className="absolute left-0 inset-y-0 flex items-center pl-3">
                 <UserPlus className="h-5 w-5 text-primary-300 group-hover:text-primary-200" />
               </span>
-              {isSubmitting ? 'Registering...' : 'Register'}
+              {isSubmitting ? 'Creating Account...' : 'Create Account'}
             </button>
-          </div>
+          </form>
+        </div>
 
-          <div className="text-center text-xm text-gray-500">
-            <p>
-              Already have an account? <a href="/login" className="text-primary-600 hover:underline">Sign in</a>
-            </p>
-          </div>
-        </form>
+        <div className="bg-white/5 backdrop-blur-lg rounded-b-2xl p-8 border-t border-white/10 text-center">
+          <p className="text-gray-300">
+            Already have an account?{' '}
+            <Link
+              to="/login"
+              className="font-medium text-primary-400 hover:text-primary-300 transition-colors"
+            >
+              Sign in instead
+            </Link>
+          </p>
+          <p className="text-xs text-gray-400 mt-4">
+            "Note: The server is hosted on Render and may take 40–50 seconds to respond on the first request due to cold start. Subsequent requests will be fast."
+          </p>
+        </div>
+
       </div>
     </div>
   );
