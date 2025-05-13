@@ -14,7 +14,7 @@ const handleLogout = () => {
   localStorage.removeItem('email');
   localStorage.removeItem('id');
   toast.success('You have logged out successfully!');
-  navigate('/');
+  navigate('/login');
 };
 
   const toggleMenu = () => {

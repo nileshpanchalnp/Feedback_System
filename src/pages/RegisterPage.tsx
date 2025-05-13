@@ -115,7 +115,7 @@ const RegisterPage: React.FC = () => {
 
           <div className="text-center text-xm text-gray-500">
             <p>
-              Already have an account? <a href="/" className="text-primary-600 hover:underline">Sign in</a>
+              Already have an account? <a href="/login" className="text-primary-600 hover:underline">Sign in</a>
             </p>
           </div>
         </form>
