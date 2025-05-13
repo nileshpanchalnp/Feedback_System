@@ -57,7 +57,7 @@ The app is mobile-friendly and works smoothly on all screen sizes.
 # Installation & Setup
 
 # 1. Clone the Repository
-git clone https://github.com/nileshpanchalnp/Feedback_System
+git clone https://github.com/nileshpanchalnp/Feedback_System.git
 
 # 2. Install Dependencies
 npm install
