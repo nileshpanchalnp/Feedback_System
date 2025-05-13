@@ -3,6 +3,18 @@
 # Project Overview
 The Event Feedback System is a full-stack **web application built using React.js for the frontend and Node.js with Express.js for the backend**. **It allows users to create events, submit feedback, and manage their feedback history efficiently**. All data is securely stored and managed in the cloud using **MongoDB Atlas**.
 
+# Installation & Setup
+
+# 1. Clone the Repository
+git clone https://github.com/nileshpanchalnp/Feedback_System.git
+
+# 2. Install Dependencies
+cd .\Feedback_System\
+
+npm install
+
+npm run dev
+
 # 🔑 Key Features
 **✅ Event Creation**
 Users can create new events by providing details like event name, date, and description.
@@ -53,20 +65,8 @@ The app is mobile-friendly and works smoothly on all screen sizes.
   
   **Deployment**: Hosted on **Vercel** 
 
-  
-# Installation & Setup
-
-# 1. Clone the Repository
-git clone https://github.com/nileshpanchalnp/Feedback_System.git
-
-# 2. Install Dependencies
-npm install
-
-npm run dev
-
 
 # Project Demonstration
-📽 Loom Video: [Provide the Loom video link here]
 
 🌍 Live Demo: https://feedback-system-amber.vercel.app/
 
