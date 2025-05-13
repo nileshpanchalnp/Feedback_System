@@ -19,6 +19,20 @@ Users can update or delete their own feedback anytime.
 **🔐 User Authentication**
 Secure login and sign-up system using JWT (JSON Web Tokens) to protect user data.
 
+**🔍 Event Category Search Feature**
+💻 How It Works (User Flow):
+The user sees a search bar labeled "Search by Category".
+
+They type in a category name or keyword.
+
+**On clicking the Search button:**
+
+The app filters the events based on the input.
+
+The filtered events are shown immediately below.
+
+If no matches are found, the app notifies the user accordingly.
+
 **🔒 Protected Routes**
 Only authenticated users can access feedback functionalities and personal history.
 
