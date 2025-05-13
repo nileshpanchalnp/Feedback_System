@@ -65,7 +65,6 @@ const FeedbackPage: React.FC = () => {
 
       await submitFeedback(
         eventId,
-        // event.name,
         rating,
         comment
       );

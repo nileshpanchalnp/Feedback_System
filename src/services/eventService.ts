@@ -1,23 +1,18 @@
 import { Event, SearchFilters } from '../types';
 import { parseISO, isWithinInterval } from 'date-fns';
 import axios from 'axios';
+import { Server } from '../SERVER/server';
 
 const ITEMS_PER_PAGE = 6;
 
-// Example: Replace mock data with dynamic data from an API
-const apiUrl = 'http://localhost:8000/Event/getEvent'; // Replace with your real API URL
-
-
+// GET EVENT API
 export const getEvents = async (
   page: number = 1,
   filters?: SearchFilters
 ): Promise<{ events: Event[]; total: number }> => {
   try {
-    // Fetch all events from the API (without pagination or filtering)
-    const response = await axios.get(apiUrl);
-    const allEvents = response.data; // Assuming your API returns an array of events
-    console.log("get event create data",response);
-
+    const response = await axios.get(Server+'Event/getEvent');
+    const allEvents = response.data;
     let filteredEvents = allEvents;
 
     // Apply filters if provided
@@ -63,23 +58,14 @@ export const getEvents = async (
   }
 };
 
+// CREATE EVENT API
 export const createEvent = async (eventData: Partial<Event>): Promise<Event> => {
   try {
-    // Send new event data to the API to create it
-    const response = await axios.post(apiUrl, eventData);
+
+    const response = await axios.post(Server+'Event/createEvent', eventData);
     return response.data;
   } catch (error) {
     console.error('Error creating event:', error);
     throw new Error('Failed to create event');
-  }
-};
-
-export const getEventById = async (id: string): Promise<Event | undefined> => {
-  try {
-    const response = await axios.get(`${apiUrl}/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching event by ID:', error);
-    return undefined;
   }
 };

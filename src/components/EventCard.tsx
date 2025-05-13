@@ -14,6 +14,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, onSubmitFeedback }) => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
+  // CREATE EVENT SHOW IN THIS PAGE 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (rating === 0) return;
@@ -107,7 +108,7 @@ const EventCard: React.FC<EventCardProps> = ({ event, onSubmitFeedback }) => {
           
           <div>
             <label htmlFor={`comment-${event.id}`} className="block text-sm font-medium text-gray-700 mb-1">
-              Comments 
+              Comments(optional) 
             </label>
             <textarea
               id={`comment-${event.id}`}

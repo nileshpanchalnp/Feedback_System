@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Feedback } from '../types';
-import { getUserFeedback,
-   updateFeedback,
-    deleteFeedback
-   } from '../services/feedbackService';
+import {
+  getUserFeedback,
+  updateFeedback,
+  deleteFeedback
+} from '../services/feedbackService';
 import FeedbackItem from '../components/FeedbackItem';
 import Navbar from '../components/Navbar';
 
@@ -16,70 +17,71 @@ const HistoryPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
 
-const userId = localStorage.getItem("id");
+  const userId = localStorage.getItem("id");
 
-console.log("userid come or not",localStorage.getItem('id'))
-
-useEffect(() => {
-  if (!userId) {
-    setError('User not logged in');
-    setLoading(false);
-    return;
-  }
-
-  const fetchFeedback = async () => {
-    setLoading(true);
-    try {
-      const data = await getUserFeedback(userId);
-      console.log("history data",data)
-      setFeedbacks(Array.isArray(data) ? data : []);
-      setError(null);
-    } catch (err) {
-      console.error('Error fetching feedback:', err);
-      setError('Failed to load your feedback history. Please try again later.');
-      toast.error('Failed to load feedback history');
-    } finally {
+  useEffect(() => {
+    if (!userId) {
+      setError('User not logged in');
       setLoading(false);
+      return;
     }
-  };
 
-  fetchFeedback();
-}, [userId]);
+    const fetchFeedback = async () => {
+      setLoading(true);
+      try {
+        const data = await getUserFeedback(userId);
+        setFeedbacks(Array.isArray(data) ? data : []);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching feedback:', err);
+        setError('Failed to load your feedback history. Please try again later.');
+        toast.error('Failed to load feedback history');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeedback();
+  }, [userId]);
 
   const handleEditFeedback = async (id: string, rating: number, comment: string) => {
     try {
-      await updateFeedback(id, rating, comment); // Assuming userId is not required anymore
+      const updated = await updateFeedback(id, rating, comment); // API call
+
       setFeedbacks(prev =>
         prev.map(f =>
           f.id === id
-            ? { ...f, rating, comment, updatedAt: new Date().toISOString() }
+            ? {
+              ...f,
+              rating: updated.rating,
+              comment: updated.comment,
+              updatedAt: updated.updatedAt || new Date().toISOString(),
+            }
             : f
         )
       );
+
       toast.success('Feedback updated successfully!');
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error updating feedback:', err);
-      toast.error('Failed to update feedback. Please try again.');
-      throw err;
+      toast.error(err.message || 'Failed to update feedback. Please try again.');
     }
   };
 
   const handleDeleteFeedback = async (id: string) => {
     try {
-      await deleteFeedback(id); // Assuming userId is not required anymore
-      setFeedbacks(prev => prev.filter(f => f.id !== id));
+      await deleteFeedback(id);
+      setFeedbacks(prev => prev.filter(f => f._id !== id));
       toast.success('Feedback deleted successfully!');
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error deleting feedback:', err);
-      toast.error('Failed to delete feedback. Please try again.');
-      throw err;
+      toast.error(err?.message || 'Failed to delete feedback. Please try again.');
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Your Feedback History</h1>

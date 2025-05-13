@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { LogIn } from 'lucide-react';
 import axios from 'axios';
+import { Server } from '../SERVER/server';
 
 
 const LoginPage: React.FC = () => {
@@ -23,7 +24,7 @@ const LoginPage: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post('http://localhost:8000/User/LoginUser', {
+      const response = await axios.post(Server+'User/LoginUser', {
         email,
         password,
       });
@@ -33,14 +34,7 @@ const LoginPage: React.FC = () => {
       toast.success(res.message || 'Login successful!');
       localStorage.setItem('token', res.token);
       localStorage.setItem('user', JSON.stringify(res.data));
-      
-      localStorage.setItem("email", res.data.email); // ✅ Correct
-      console.log("email come or not",res.data.email)
-
-      localStorage.setItem("id", res.data.id); // ✅ Correct
-      console.log("id come or not set",res.data.id)
-
-      
+      localStorage.setItem("id", res.data.id); 
       navigate('/feedback');
     } catch (error: any) {
       const message =
@@ -62,7 +56,7 @@ const LoginPage: React.FC = () => {
             Sign in to submit and manage your feedback
           </p>
         </div>
-        
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
@@ -99,19 +93,12 @@ const LoginPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="text-sm text-center text-gray-500">
-            <p className="mb-1">Demo Credentials:</p>
-            <p>Email: user@example.com</p>
-            <p>Password: password123</p>
-          </div>
-
           <div>
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 ${
-                isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-primary-700'
-              }`}
+              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-primary-700'
+                }`}
             >
               <span className="absolute left-0 inset-y-0 flex items-center pl-3">
                 <LogIn className="h-5 w-5 text-primary-300 group-hover:text-primary-200" />
@@ -119,15 +106,15 @@ const LoginPage: React.FC = () => {
               {isSubmitting ? 'Signing in...' : 'Sign in'}
             </button>
           </div>
-          
-           <div className="text-center text-xs text-gray-500">
-  <p>
-    Don&apos;t have an account?{' '}
-    <a href="/register" className="text-primary-600 hover:underline">
-      Register
-    </a>
-  </p>
-</div>
+
+          <div className="text-center text-xm text-gray-500">
+            <p>
+              Don&apos;t have an account?{' '}
+              <a href="/register" className="text-primary-600 hover:underline">
+                Register
+              </a>
+            </p>
+          </div>
         </form>
       </div>
     </div>

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { UserPlus } from 'lucide-react';
+import { Server } from '../SERVER/server';
 
 const RegisterPage: React.FC = () => {
   const [name, setName] = useState('');
@@ -22,7 +23,7 @@ const RegisterPage: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-        await axios.post('https://lsqpgdt4-8000.inc1.devtunnels.ms/User/createdUser', {
+        await axios.post(Server+'User/createdUser', {
         username: name,  
         email,
         password,
@@ -112,7 +113,7 @@ const RegisterPage: React.FC = () => {
             </button>
           </div>
 
-          <div className="text-center text-xs text-gray-500">
+          <div className="text-center text-xm text-gray-500">
             <p>
               Already have an account? <a href="/" className="text-primary-600 hover:underline">Sign in</a>
             </p>

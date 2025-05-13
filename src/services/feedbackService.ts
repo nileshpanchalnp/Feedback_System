@@ -2,15 +2,10 @@ import axios from 'axios';
 import { Feedback } from '../types';
 import { Server } from '../SERVER/server';
 
-const API_BASE_URL = 'http://localhost:8000'; 
-
-
-
+// GET FEEDBACK API 
 export const getUserFeedback = async (userId: string): Promise<Feedback[]> => {
   try {
     const response = await axios.get(Server+`Feedback/fbget/${userId}`);
-    console.log("api are right or ",Server+`Feedback/fbget/${userId}`)
-    console.log("Feedback response:", response.data); // ✅ Check full response
      return response.data.feedbacks; 
   } catch (error: any) {
     console.error('Error fetching feedback:', error);
@@ -18,21 +13,24 @@ export const getUserFeedback = async (userId: string): Promise<Feedback[]> => {
   }
 };
 
-// Submit new feedback
+// CREATE FEEDBACK API 
 export const submitFeedback = async (
   eventId: string,
   rating: number,
-  comment: string
+  comment?: string 
 ): Promise<Feedback> => {
   try {
     const token = localStorage.getItem('token');
-    console.log("event id",eventId)
-    console.log("rating id",rating)
-    console.log("comment id",comment)
+
+    // Build payload dynamically
+    const payload: any = { eventId, rating };
+    if (comment && comment.trim() !== '') {
+      payload.comment = comment;
+    }
+
     const response = await axios.post(
-        Server + "Feedback/fbcreate/",
-      { eventId, rating, comment },
-      
+      Server + "Feedback/fbcreate/",
+      payload,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -44,7 +42,7 @@ export const submitFeedback = async (
   }
 };
 
-// Update existing feedback
+// UPDATE FEEDBACK API 
 export const updateFeedback = async (
   feedbackId: string,
   rating: number,
@@ -53,7 +51,7 @@ export const updateFeedback = async (
   try {
     const token = localStorage.getItem('token');
     const response = await axios.put(
-      `${API_BASE_URL}/${feedbackId}`,
+      Server+`Feedback/fbupdate/${feedbackId}`, // e.g., Feedback/123
       { rating, comment },
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -66,11 +64,11 @@ export const updateFeedback = async (
   }
 };
 
-// Delete feedback
+// DELETE FEEDBACK API
 export const deleteFeedback = async (feedbackId: string): Promise<void> => {
   try {
     const token = localStorage.getItem('token');
-    await axios.delete(`${API_BASE_URL}/${feedbackId}`, {
+    await axios.delete(Server+`Feedback/fbdelete/${feedbackId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   } catch (error: any) {

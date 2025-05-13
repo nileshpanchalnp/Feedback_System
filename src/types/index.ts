@@ -2,7 +2,6 @@ export interface User {
   id: string;
   email: string;
   name?: string;
-  role: 'admin' | 'user';
 }
 
 export interface Event {
@@ -23,8 +22,10 @@ export interface Event {
 }
 
 export interface Feedback {
+  name: string;
+  _id: string;
   id: string;
-  eventId: string;
+  eventId: Event;
   eventName: string;
   userId: string;
   rating: number;
@@ -51,7 +52,7 @@ export interface SearchFilters {
   query: string;
   category?: string;
   dateRange?: {
-    start: string;
-    end: string;
+    start?: string; 
+    end?: string; 
   };
 }

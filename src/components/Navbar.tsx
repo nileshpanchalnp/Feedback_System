@@ -1,15 +1,21 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogOut, Menu, X } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-  const handleLogout = () => {
-    // Placeholder logic for logout — replace or integrate actual logic as needed
-    navigate('/login');
-  };
+// LOGOUT 
+const handleLogout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  localStorage.removeItem('email');
+  localStorage.removeItem('id');
+  toast.success('You have logged out successfully!');
+  navigate('/');
+};
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -25,7 +31,6 @@ const Navbar: React.FC = () => {
             </Link>
           </div>
           
-          {/* Desktop menu */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-center space-x-4">
               <Link

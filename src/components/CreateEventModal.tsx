@@ -4,12 +4,13 @@ import { X, Calendar, MapPin, Users, Tag } from 'lucide-react';
 import { format } from 'date-fns';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { Server } from '../SERVER/server';
 
 interface CreateEventModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
-
+// create Event Form
 const CreateEventModal: React.FC<CreateEventModalProps> = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -22,29 +23,29 @@ const CreateEventModal: React.FC<CreateEventModalProps> = ({ isOpen, onClose }) 
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setIsSubmitting(true);
-  try {
-    await axios.post('http://localhost:8000/Event/createEvent', formData);
-    toast.success('Event created successfully!');
-    setFormData({
-      name: '',
-      date: format(new Date(), 'yyyy-MM-dd'),
-      location: '',
-      description: '',
-      capacity: 100,
-      category: 'conference',
-      organizer: ''
-    });
-    onClose();
-  } catch (error) {
-    console.error('Error creating event:', error);
-    toast.error('Failed to create event.');
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await axios.post(Server + 'Event/createEvent', formData);
+      toast.success('Event created successfully!');
+      setFormData({
+        name: '',
+        date: format(new Date(), 'yyyy-MM-dd'),
+        location: '',
+        description: '',
+        capacity: 100,
+        category: 'conference',
+        organizer: ''
+      });
+      onClose();
+    } catch (error) {
+      console.error('Error creating event:', error);
+      toast.error('Failed to create event.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -54,9 +55,10 @@ const handleSubmit = async (e: React.FormEvent) => {
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-      
-      <div className="fixed inset-0 flex items-center justify-center p-4">
-        <Dialog.Panel className="mx-auto max-w-2xl w-full bg-white rounded-xl shadow-2xl">
+
+      <div className="fixed inset-0 flex items-center justify-center p-4 overflow-y-auto">
+        <Dialog.Panel className="mx-auto max-w-2xl w-full bg-white rounded-xl shadow-2xl max-h-[90vh] overflow-y-auto">
+
           <div className="flex justify-between items-center p-6 border-b">
             <Dialog.Title className="text-2xl font-semibold text-gray-900">
               Create New Event
