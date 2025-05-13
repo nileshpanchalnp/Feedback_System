@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { LogIn } from 'lucide-react';
+import { LogIn, Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
 import { Server } from '../SERVER/server';
 
@@ -10,8 +10,12 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,11 +24,14 @@ const LoginPage: React.FC = () => {
       toast.error('Please enter both email and password');
       return;
     }
-
+    if (!validateEmail(email)) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post(Server+'User/LoginUser', {
+      const response = await axios.post(Server + 'User/LoginUser', {
         email,
         password,
       });
@@ -34,7 +41,7 @@ const LoginPage: React.FC = () => {
       toast.success(res.message || 'Login successful!');
       localStorage.setItem('token', res.token);
       localStorage.setItem('user', JSON.stringify(res.data));
-      localStorage.setItem("id", res.data.id); 
+      localStorage.setItem("id", res.data.id);
       navigate('/feedback');
     } catch (error: any) {
       const message =
@@ -75,22 +82,33 @@ const LoginPage: React.FC = () => {
                 placeholder="Email address"
               />
             </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
+            <div className="relative">
+              <label htmlFor="password" className="sr-only">Password</label>
               <input
                 id="password"
                 name="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 autoComplete="current-password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm pr-10" // pr-10 creates space for icon
                 placeholder="Password"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 focus:outline-none"
+                tabIndex={-1}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5" />
+                ) : (
+                  <Eye className="h-5 w-5" />
+                )}
+              </button>
             </div>
+
           </div>
 
           <div>
