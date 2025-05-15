@@ -27,7 +27,7 @@ const FeedbackItem: React.FC<FeedbackItemProps> = ({ feedback, onEdit, onDelete 
     setIsEditing(false);
   };
 
-    const handleSaveEdit = async () => {
+  const handleSaveEdit = async () => {
     setIsSubmitting(true);
     try {
       await onEdit(feedback._id, rating, comment);
@@ -46,7 +46,7 @@ const FeedbackItem: React.FC<FeedbackItemProps> = ({ feedback, onEdit, onDelete 
   const handleConfirmDelete = async () => {
     setIsDeleting(true);
     try {
-      await onDelete(feedback._id); 
+      await onDelete(feedback._id);
       setShowDeleteConfirm(false);
     } catch (error) {
       console.error('Error deleting feedback:', error);
@@ -72,8 +72,10 @@ const FeedbackItem: React.FC<FeedbackItemProps> = ({ feedback, onEdit, onDelete 
     <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg">
       <div className="p-4 sm:p-5 border-b border-gray-200 bg-primary-50">
         <div className="flex justify-between items-start">
-          <h3 className="text-lg font-semibold text-primary-900">{feedback.eventId.name}</h3>
-          
+          <h3 className="text-lg font-semibold text-primary-900">
+            {feedback.eventId?.name ?? 'Unnamed Event'}
+          </h3>
+
           {!isEditing && !showDeleteConfirm && (
             <div className="flex space-x-2">
               <button
@@ -93,13 +95,13 @@ const FeedbackItem: React.FC<FeedbackItemProps> = ({ feedback, onEdit, onDelete 
             </div>
           )}
         </div>
-        
+
         <div className="flex items-center mt-1 text-sm text-gray-500">
           <Calendar size={14} className="mr-1" />
           <span>{formatDate(feedback.createdAt)}</span>
         </div>
       </div>
-      
+
       <div className="p-4 sm:p-5">
         {showDeleteConfirm ? (
           <div className="space-y-4">
@@ -129,7 +131,7 @@ const FeedbackItem: React.FC<FeedbackItemProps> = ({ feedback, onEdit, onDelete 
               </label>
               <StarRating onChange={setRating} initialRating={rating} />
             </div>
-            
+
             <div>
               <label htmlFor={`edit-comment-${feedback.id}`} className="block text-sm font-medium text-gray-700 mb-1">
                 Comments
@@ -142,7 +144,7 @@ const FeedbackItem: React.FC<FeedbackItemProps> = ({ feedback, onEdit, onDelete 
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring focus:ring-primary-500 focus:ring-opacity-50 bg-gray-50 p-2 border"
               />
             </div>
-            
+
             <div className="flex space-x-3">
               <button
                 onClick={handleSaveEdit}
@@ -165,7 +167,7 @@ const FeedbackItem: React.FC<FeedbackItemProps> = ({ feedback, onEdit, onDelete 
         ) : (
           <div>
             <div className="mb-3">
-              <StarRating initialRating={feedback.rating} onChange={() => {}} readonly size={20} />
+              <StarRating initialRating={feedback.rating} onChange={() => { }} readonly size={20} />
             </div>
             {feedback.comment ? (
               <p className="text-gray-700">{feedback.comment}</p>

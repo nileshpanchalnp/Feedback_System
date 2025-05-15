@@ -20,9 +20,8 @@ const HistoryPage: React.FC = () => {
 
   const userId = localStorage.getItem("id");
 
-  useEffect(() => {
-    if (!userId) {
-      setError('User not logged in');
+  if (!userId) {
+    setError('User not logged in');
       setLoading(false);
       return;
     }
@@ -41,7 +40,8 @@ const HistoryPage: React.FC = () => {
         setLoading(false);
       }
     };
-
+    
+    useEffect(() => {
     fetchFeedback();
   }, [userId]);
 
@@ -63,6 +63,7 @@ const HistoryPage: React.FC = () => {
       );
 
       toast.success('Feedback updated successfully!');
+      fetchFeedback();
     } catch (err: any) {
       console.error('Error updating feedback:', err);
       toast.error(err.message || 'Failed to update feedback. Please try again.');
