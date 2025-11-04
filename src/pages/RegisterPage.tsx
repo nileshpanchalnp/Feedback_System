@@ -18,7 +18,7 @@ const RegisterPage: React.FC = () => {
   };
 
   const validatePassword = (password: string) => {
-    return /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/.test(password);
+    return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@#$&!])[A-Za-z0-9@#$&!]{4,20}$/.test(password);
   };
   const [errors, setErrors] = useState({
     name: '',
@@ -49,7 +49,7 @@ const RegisterPage: React.FC = () => {
     if (!password) {
       newErrors.password = 'Password is required';
     } else if (!validatePassword(password)) {
-      newErrors.password = 'Password must be at least 6 characters and include both letters and numbers';
+      newErrors.password = 'Password must be at least 6 characters and Maximum 20 Characters include both letters and numbers and Symbols';
     }
 
     setErrors(newErrors);
