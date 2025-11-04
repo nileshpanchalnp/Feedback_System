@@ -18,7 +18,7 @@ const RegisterPage: React.FC = () => {
   };
 
   const validatePassword = (password: string) => {
-    return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@#$&!])[A-Za-z0-9@#$&!]{4,20}$/.test(password);
+    return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@#$&!])[A-Za-z0-9@#$&!]{4,21}$/.test(password);
   };
   const [errors, setErrors] = useState({
     name: '',
@@ -131,8 +131,6 @@ const RegisterPage: React.FC = () => {
                 </div>
                 {errors.email && <p className="text-red-400 text-sm mt-1 ml-1">{errors.email}</p>}
               </div>
-
-
               <div className="relative">
                 <label htmlFor="password" className="text-sm font-medium text-gray-300 block mb-2">
                   Password
