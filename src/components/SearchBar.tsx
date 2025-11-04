@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Filter, Calendar } from 'lucide-react';
 import { SearchFilters } from '../types';
 
@@ -16,6 +16,17 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
       end: ''
     }
   });
+
+  // ✅ AUTO SEARCH WITH DEBOUNCE
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      if (filters.query.trim() !== '') {
+        onSearch(filters);
+      }
+    }, 500); // 500ms delay
+
+    return () => clearTimeout(delay);
+  }, [filters]); // Runs whenever filters change
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +51,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     }
   };
 
-  return (
+ return (
     <div className="w-full max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-4">
   <form onSubmit={handleSubmit}>
     <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -130,3 +141,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 };
 
 export default SearchBar;
+
+
+
+ 
