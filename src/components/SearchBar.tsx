@@ -26,7 +26,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     }, 500); // 500ms delay
 
     return () => clearTimeout(delay);
-  }, [filters]); // Runs whenever filters change
+  }, [filters]); 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

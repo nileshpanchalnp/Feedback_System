@@ -51,7 +51,7 @@ export const updateFeedback = async (
   try {
     const token = localStorage.getItem('token');
     const response = await axios.put(
-      Server+`Feedback/fbupdate/${feedbackId}`, // e.g., Feedback/123
+      Server+`Feedback/fbupdate/${feedbackId}`, 
       { rating, comment },
       {
         headers: { Authorization: `Bearer ${token}` },

@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 
 const HistoryPage: React.FC = () => {
 
-  const [feedbacks, setFeedbacks] = useState<Feedback[]>([]); // Ensure feedbacks is always an array
+  const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
